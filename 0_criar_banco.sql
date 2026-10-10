@@ -1,18 +1,12 @@
 -- Projeto final do Módulo 1
--- Autora: Camila
+-- Autora: Camila Gomes dos Santos
 
--- Remove as tabelas antigas para recriar a estrutura corrigida.
--- Primeiro as filhas, depois a tabela mãe.
+-- 1. Conectado ao banco postgres no pgAdmin,
+-- selecione e execute somente o comando abaixo:
+CREATE DATABASE transparencia;
 
-DROP TABLE IF EXISTS silver_pagamento;
-DROP TABLE IF EXISTS silver_passagem;
-DROP TABLE IF EXISTS silver_trecho;
-DROP TABLE IF EXISTS silver_viagem;
-
-DROP TABLE IF EXISTS raw_pagamento;
-DROP TABLE IF EXISTS raw_passagem;
-DROP TABLE IF EXISTS raw_trecho;
-DROP TABLE IF EXISTS raw_viagem;
+-- 2. Depois, abra o Query Tool no banco transparencia
+-- e execute somente os comandos CREATE TABLE abaixo.
 
 CREATE TABLE IF NOT EXISTS silver_viagem (
     id_viagem VARCHAR(20) PRIMARY KEY,
