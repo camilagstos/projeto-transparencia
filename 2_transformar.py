@@ -10,15 +10,41 @@ from psycopg2.extras import execute_values
 def converter_valor(coluna):
     valores = coluna.str.strip()
     valores = valores.str.replace(",", ".", regex=False)
-    return pd.to_numeric(valores, errors="coerce")
+    convertidos = pd.to_numeric(valores, errors="coerce")
+
+    invalidos = (
+        valores.notna()
+        & valores.ne("")
+        & convertidos.isna()
+    )
+
+    if invalidos.any():
+        raise ValueError(
+            f"Valor numérico inválido na coluna {coluna.name}."
+        )
+
+    return convertidos
 
 def converter_data(coluna):
     datas = coluna.str.strip()
-    return pd.to_datetime(
+    convertidas = pd.to_datetime(
         datas,
         format="%d/%m/%Y",
         errors="coerce"
     )
+
+    invalidas = (
+        datas.notna()
+        & datas.ne("")
+        & convertidas.isna()
+    )
+
+    if invalidas.any():
+        raise ValueError(
+            f"Data inválida na coluna {coluna.name}."
+        )
+
+    return convertidas
 
 def limpar_texto(coluna):
     textos = coluna.str.strip()
@@ -44,7 +70,18 @@ def transformar_viagens(viagens):
 
     for coluna in colunas_valores:
         viagens[coluna] = converter_valor(viagens[coluna])
+        
+    obrigatorias = ["id_viagem", "nome_orgao_superior"]
 
+    if viagens[obrigatorias].isna().any().any():
+        raise ValueError("Viagem com campo obrigatório ausente.")
+
+    if (viagens["data_fim"] < viagens["data_inicio"]).any():
+        raise ValueError("Viagem com data final anterior à inicial.")
+
+    if (viagens["valor_diarias"] < 0).any():
+        raise ValueError("Viagem com valor de diárias negativo.")
+    
     viagens["duracao_dias"] = (
         viagens["data_fim"] - viagens["data_inicio"]
     ).dt.days + 1
@@ -104,8 +141,11 @@ def carregar_pagamentos(conexao, cursor_carga):
         cursor_leitura.execute("""
             SELECT id_viagem, num_proposta, nome_orgao_pagador,
                    nome_ug_pagadora, tipo_pagamento, valor
-            FROM raw_pagamento
-        """)
+            FROM (
+                SELECT DISTINCT *
+                FROM raw_pagamento
+            ) AS pagamentos_unicos
+            """)
 
         while True:
             linhas = cursor_leitura.fetchmany(TAMANHO_BLOCO)
@@ -185,8 +225,11 @@ def carregar_passagens(conexao, cursor_carga):
                    pais_origem_ida, uf_origem_ida, cidade_origem_ida,
                    pais_destino_ida, uf_destino_ida, cidade_destino_ida,
                    valor_passagem, taxa_servico, data_emissao
-            FROM raw_passagem
-        """)
+            FROM (
+                SELECT DISTINCT *
+                FROM raw_passagem
+            ) AS passagens_unicas
+            """)
 
         while True:
             linhas = cursor_leitura.fetchmany(TAMANHO_BLOCO)

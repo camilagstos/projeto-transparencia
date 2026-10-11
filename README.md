@@ -136,8 +136,8 @@ Execute todas as células na ordem. O notebook cria a tabela e a visão GOLD e a
 
 - O Ministério da Justiça e Segurança Pública apresentou o maior gasto total com viagens, com aproximadamente R$ 486,93 milhões.
 - Veículo Oficial foi o meio de transporte mais frequente, com 386.424 trechos, seguido de Aéreo, com 232.666.
-- DIÁRIAS apresentou o maior valor médio por registro de pagamento, com R$ 2.078,28.
-- DIÁRIAS e PASSAGEM representaram juntas aproximadamente 99,58% da soma dos valores registrados na tabela de pagamentos.
+- DIÁRIAS apresentou o maior número de registros de pagamento, com 366.351 ocorrências. PASSAGEM apresentou o maior valor médio por registro, com R$ 1.856,78.
+- DIÁRIAS e PASSAGEM representaram juntas aproximadamente 99,50% da soma dos valores registrados na tabela de pagamentos.
 - São Paulo e Distrito Federal foram as UFs de destino com mais trechos, com 82.722 e 79.962 registros, respectivamente.
 - Foram encontrados 26.659 trechos com meio de transporte registrado como “Inválido”. O Ministério da Defesa apresentou a maior quantidade nessa categoria, com 9.374 registros.
 
