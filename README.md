@@ -36,6 +36,7 @@ As consultas SQL foram utilizadas no notebook para apresentar os resultados em t
 - `1_extrair.py`: download dos arquivos e carga dos dados nas tabelas RAW.
 - `2_transformar.py`: tratamento dos dados e carga nas tabelas SILVER.
 - `3_analise.ipynb`: criação da camada GOLD e apresentação das seis análises, com consultas SQL, tabelas, gráficos e interpretações.
+- `requirements.txt`: lista das bibliotecas necessárias para executar o projeto.
 - `config.py`: configurações utilizadas pelo projeto.
 - `banco.py`: funções de conexão e operações no PostgreSQL.
 - `.env.example`: exemplo das configurações de conexão, sem a senha pessoal.
@@ -78,7 +79,7 @@ Ative o ambiente no Windows PowerShell:
 Instale as bibliotecas:
 
 ```powershell
-python -m pip install pandas requests psycopg2-binary matplotlib ipykernel
+python -m pip install -r requirements.txt
 ```
 
 ### 2. Configurar a conexão
