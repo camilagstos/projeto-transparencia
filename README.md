@@ -6,9 +6,11 @@ Projeto desenvolvido para a conclusão do módulo 01 de Manipulação de Dados c
 
 ## Objetivo
 
-Analisar os dados de viagens a serviço do Governo Federal disponibilizados pelo Portal da Transparência, identificando os gastos por órgão, os meios de transporte utilizados e os destinos mais frequentes.
+Analisar os dados de viagens a serviço do Governo Federal, originalmente provenientes do Portal da Transparência e disponibilizados pelo curso SCTEC/SENAI por meio do Google Drive.
 
-Também busquei observar informações que limitam a análise, como os trechos com meio de transporte registrado como “Inválido”.
+Busquei identificar os órgãos com maiores gastos, os meios de transporte utilizados, os destinos mais frequentes e os valores registrados nos pagamentos.
+
+Também procurei comparar os custos médios por destino, verificar a duração das viagens e identificar informações que podem limitar a análise, como os trechos com meio de transporte registrado como "Inválido" e as viagens com custo total igual a zero.
 
 ## Organização dos dados
 
@@ -35,7 +37,7 @@ As consultas SQL foram utilizadas no notebook para apresentar os resultados em t
 - `0_criar_banco.sql`: criação do banco de dados e das tabelas RAW e SILVER.
 - `1_extrair.py`: download dos arquivos e carga dos dados nas tabelas RAW.
 - `2_transformar.py`: tratamento dos dados e carga nas tabelas SILVER.
-- `3_analise.ipynb`: criação da camada GOLD e apresentação das seis análises, com consultas SQL, tabelas, gráficos e interpretações.
+- `3_analise.ipynb`: criação da camada GOLD e apresentação das nove análises, com consultas SQL, tabelas, gráficos e interpretações.
 - `requirements.txt`: lista das bibliotecas necessárias para executar o projeto.
 - `config.py`: configurações utilizadas pelo projeto.
 - `banco.py`: funções de conexão e operações no PostgreSQL.
@@ -50,7 +52,10 @@ As consultas SQL foram utilizadas no notebook para apresentar os resultados em t
 3. Qual é o valor médio por tipo de pagamento?
 4. Qual é a participação de cada tipo de pagamento nos valores registrados?
 5. Quais são as cinco UFs de destino com mais trechos registrados?
-6. Quais órgãos têm mais trechos com meio de transporte registrado como “Inválido”?
+6. Quais órgãos têm mais trechos com meio de transporte registrado como "Inválido"?
+7. Quais são os três destinos com maior custo médio por viagem, considerando localidades com pelo menos 10 viagens?
+8. Qual foi a viagem de maior duração e qual seu custo total?
+9. Quais órgãos pagadores apresentam os maiores valores acumulados?
 
 ## Dados utilizados
 
@@ -130,16 +135,20 @@ Essa etapa trata os dados e carrega as tabelas SILVER.
 
 Abra o arquivo `3_analise.ipynb` no VS Code e selecione o ambiente `.venv` como kernel.
 
-Execute todas as células na ordem. O notebook cria a tabela e a visão GOLD e apresenta as seis análises com tabelas, gráficos e interpretações.
+Execute todas as células na ordem. O notebook cria a tabela e a visão GOLD e apresenta as nove análises com tabelas, gráficos e interpretações.
 
 ## Principais resultados
 
-- O Ministério da Justiça e Segurança Pública apresentou o maior gasto total com viagens, com aproximadamente R$ 486,93 milhões.
-- Veículo Oficial foi o meio de transporte mais frequente, com 386.424 trechos, seguido de Aéreo, com 232.666.
-- DIÁRIAS apresentou o maior número de registros de pagamento, com 366.351 ocorrências. PASSAGEM apresentou o maior valor médio por registro, com R$ 1.856,78.
-- DIÁRIAS e PASSAGEM representaram juntas aproximadamente 99,50% da soma dos valores registrados na tabela de pagamentos.
-- São Paulo e Distrito Federal foram as UFs de destino com mais trechos, com 82.722 e 79.962 registros, respectivamente.
-- Foram encontrados 26.659 trechos com meio de transporte registrado como “Inválido”. O Ministério da Defesa apresentou a maior quantidade nessa categoria, com 9.374 registros.
+- O Ministério da Justiça e Segurança Pública foi o órgão com o maior gasto total em viagens, com aproximadamente R$ 486,93 milhões.
+- O meio de transporte mais utilizado foi o Veículo Oficial, com 386.424 trechos registrados, seguido do transporte Aéreo, com 232.666.
+- O pagamento de DIÁRIAS foi o mais frequente, com 366.351 registros. Já o tipo PASSAGEM apresentou o maior valor médio por pagamento, de R$ 1.856,78.
+- Os pagamentos de DIÁRIAS e PASSAGEM representaram juntos aproximadamente 99,50% dos valores registrados.
+- São Paulo e Distrito Federal foram os destinos com maior quantidade de trechos, com 82.722 e 79.962 registros, respectivamente.
+- Identifiquei 26.659 trechos com o meio de transporte informado como "Inválido". O Ministério da Defesa apresentou a maior quantidade desses registros, com 9.374 ocorrências.
+- Entre os destinos com pelo menos 10 viagens, Sananduva/RS apresentou o maior custo médio por viagem, de R$ 87.164,61, seguida de Monte Negro/RO, com R$ 86.612,71, e Novo Santo Antônio/MT, com R$ 79.266,08.
+- A viagem com maior duração registrada foi de 384 dias, com destino a Mogi Mirim/SP e vinculada ao Ministério da Previdência Social. Apesar da duração, o custo total informado foi de R$ 0,00.
+- Nos pagamentos por órgão, a classificação "Sigiloso" apresentou o maior valor acumulado, de R$ 170.659.883,35. Entre os órgãos identificados, o Fundo Nacional de Segurança Pública teve o maior valor, com R$ 141.911.719,64.
+
 
 ## Limitações da análise
 
@@ -152,6 +161,10 @@ Os registros com meio de transporte “Inválido” foram mantidos, pois não h�
 A participação por tipo de pagamento considera a soma dos valores registrados, incluindo restituições. Por isso, esse total não representa o gasto líquido com viagens.
 
 As comparações de gastos e de registros “Inválido” mostram valores absolutos. Esses resultados, sozinhos, não permitem concluir que houve desperdício ou que um órgão tem pior qualidade de preenchimento.
+
+Na análise do custo médio por destino, considerei apenas localidades com pelo menos 10 viagens. Como uma viagem pode incluir vários destinos, o valor total foi considerado em cada destino diferente. Por isso, os resultados não representam necessariamente o valor gasto exclusivamente em cada localidade.
+
+Também identifiquei uma viagem com duração de 384 dias e custo total registrado de R$ 0,00. Esse resultado foi mantido conforme os dados disponíveis, pois não tenho informações suficientes para explicar o motivo do valor informado.
 
 ## Possibilidades de melhoria
 
